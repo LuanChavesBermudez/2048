@@ -14,19 +14,9 @@ function inicio() {
         [0, 0, 0, 0]    
     ]
 
-    //genera dos columnas y filas aleatorias para valores iniciales
-    let indiceFila1 = Math.floor(Math.random() * 4);
-    let indiceFila2 = Math.floor(Math.random() * 4);
-    let indiceColumna1 = Math.floor(Math.random() * 4);
-    let indiceColumna2 = Math.floor(Math.random() * 4);
-
-    if (indiceFila1 == indiceFila2 && indiceColumna1 == indiceColumna2) {
-        let indiceFila2 = Math.floor(Math.random() * 4);
-        let indiceColumna2 = Math.floor(Math.random() * 4);
-    }
-
-    matriz[indiceFila1][indiceColumna1] = 2;
-    matriz[indiceFila2][indiceColumna2] = 2;
+    //genera dos valores iniciales aleatorios
+    poblarCelda();
+    poblarCelda();
 
     areaJuego = document.getElementById("AreaJuego");
 
@@ -63,8 +53,37 @@ function actualizarTablero(){
     }
 }
 
+function hayCampo() {
+    for (let f = 0; f < 3; f++){
+        if (matriz[f].indexOf(0) != -1){
+            return true;
+        }
+    }
+    return false;
+}
+
+function gameOver() {
+    return true;
+}
+
+function poblarCelda() {
+    let opciones = [2, 2, 2, 2, 4];
+    let indiceFila = Math.floor(Math.random() * 4);
+    let indiceColumna = Math.floor(Math.random() * 4);
+    if (hayCampo()) {
+        while(matriz[indiceFila][indiceColumna] != 0){
+            indiceFila = Math.floor(Math.random() * 4);
+            indiceColumna = Math.floor(Math.random() * 4);
+        }
+        matriz[indiceFila][indiceColumna] = opciones[Math.floor(Math.random() * opciones.length)];
+    } else {
+        gameOver();
+    }
+}
+
 
 function moverIzq() {
+    let seMovio = false;
     for (let f = 0; f < 4; f++) {
         //variable para recordar el ultimo numero diferente a cero
         let anterior = 0;
@@ -83,6 +102,7 @@ function moverIzq() {
                     matriz[f][primerCero] = anterior*2;
                     //olvida el numero previo para que no se fusionen muchos en cadena
                     anterior = 0;
+                    seMovio = true;
                     continue;
                 }
                 //si no hay valor previo almacenado
@@ -91,9 +111,11 @@ function moverIzq() {
                 matriz[f][primerCero] = actual;
                 //lo mueve lo mas a la izquierda posible y lo guarda como el ultimo valor diferente a 0
                 anterior = actual;
+                if (c != primerCero) {seMovio = true;}
             }
         }
     }
     //vuelve a dibujar los valores en pantalla
+    if (seMovio) {poblarCelda();}
     actualizarTablero();
 }
