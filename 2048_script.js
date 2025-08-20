@@ -119,3 +119,4 @@ function moverIzq() {
     if (seMovio) {poblarCelda();}
     actualizarTablero();
 }
+//document.addEventListener("keyup", moverTablero);
