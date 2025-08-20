@@ -3,7 +3,9 @@ var matriz;
 var areaJuego;
 
 window.onload = function() {
+    updateMatrizL();
     inicio();
+    
 }
 
 function inicio() {
@@ -46,6 +48,99 @@ function inicio() {
                 celda.innerText = "";
             }
             fila.appendChild(celda);
+            
+        }
+    }
+}
+    function updateMatrizLAb(){
+        for(let f=0; f<4; f++){
+            for(let c=0; c<4;c++){
+                celda.innerText = matriz[f][c];
+                let num=celda.innerText;
+                if(matriz[f][c]==matriz[f][c+1]){
+                    num=matriz[f][c]=matriz[f][c]*2;
+                    matriz[f][c+1]=0
+                    celda.innerText=num;
+                }
+                else{
+                    celda.innerText="";
+                }
+            }
+            fila.appendChild(celda);
+
+
+        }
+    }
+    function updateMatrizLAR(){
+        for(let f=0; f<4; f++){
+            for(let c=0; c<4;c++){
+                celda.innerText = matriz[f][c];
+                let num=celda.innerText;
+                if(matriz[f][c+1]==matriz[f][c]){
+                    num=matriz[f][c]=matriz[f][c]*2;
+                    matriz[f][c+1]=0
+                    celda.innerText=num;
+                }
+                else{
+                    celda.innerText="";
+                }
+            }
+            fila.appendChild(celda);
+
+
+        }
+    }
+     function updateMatrizLD(){
+        for(let f=0; f<4; f++){
+            for(let c=0; c<4;c++){
+                celda.innerText = matriz[f][c];
+                let num=celda.innerText;
+                if(matriz[f][c]==matriz[f+1][c]){
+                    num=matriz[f][c]=matriz[f][c]*2;
+                    matriz[f+1][c]=0
+                    celda.innerText=num;
+                }
+                else{
+                    celda.innerText="";
+                }
+            }
+            fila.appendChild(celda);
+
+
+        }
+    }
+    function updateMatrizLI(){
+        for(let f=0; f<4; f++){
+            for(let c=0; c<4;c++){
+                celda.innerText = matriz[f][c];
+                let num=celda.innerText;
+                if(matriz[f+1][c]==matriz[f][c]){
+                    num=matriz[f][c]=matriz[f][c]*2;
+                    matriz[f+1][c]=0
+                    celda.innerText=num;
+                }
+                else{
+                    celda.innerText="";
+                }
+            }
+            fila.appendChild(celda);
+
+
+        }
+    }
+    function actualizarTablero(){
+        for(let f=0; f<4; f++){
+             for(let c=0; c<4;c++){
+                let celda = document.createElement("div");
+                celda.id = f.toString() + "-" + c.toString();
+                let num=matriz[f][c];
+                if(num!=0){
+                    celda.innerText=num;
+                }
+                else{
+                    celda.innerText="";
+                }
+
         }
     }
 }
