@@ -1,9 +1,20 @@
-var movimentos = 0;
+var puntaje = 0;
 var matriz;
 var areaJuego;
 
 window.onload = function() {
     inicio();
+}
+
+document.addEventListener("keyup", moverTablero);
+
+function moverTablero(evento) {
+    if (evento.key == "ArrowLeft") {
+        moverIzq();
+    }
+    if (evento.key == "ArrowRight") {
+        moverDer();
+    }
 }
 
 function inicio() {
@@ -13,11 +24,6 @@ function inicio() {
         [0, 0, 0, 0],
         [0, 0, 0, 0]    
     ]
-
-    //genera dos valores iniciales aleatorios
-    poblarCelda();
-    poblarCelda();
-
     areaJuego = document.getElementById("AreaJuego");
 
     //genera flex containers que funcionan como filas
@@ -53,29 +59,20 @@ function actualizarTablero(){
     }
 }
 
-function hayCampo() {
-    for (let f = 0; f < 3; f++){
-        if (matriz[f].indexOf(0) != -1){
-            return true;
-        }
-    }
-    return false;
-}
-
 function gameOver() {
     return true;
 }
 
 function poblarCelda() {
     let opciones = [2, 2, 2, 2, 4];
-    let indiceFila = Math.floor(Math.random() * 4);
     let indiceColumna = Math.floor(Math.random() * 4);
-    if (hayCampo()) {
-        while(matriz[indiceFila][indiceColumna] != 0){
-            indiceFila = Math.floor(Math.random() * 4);
+    //si la fila superior no está llena
+    if (matriz[0].indexOf(0) != -1) {
+        while(matriz[0][indiceColumna] != 0){
             indiceColumna = Math.floor(Math.random() * 4);
         }
-        matriz[indiceFila][indiceColumna] = opciones[Math.floor(Math.random() * opciones.length)];
+        matriz[0][indiceColumna] = opciones[Math.floor(Math.random() * opciones.length)];
+        actualizarTablero();
     } else {
         gameOver();
     }
@@ -83,10 +80,10 @@ function poblarCelda() {
 
 
 function moverIzq() {
-    let seMovio = false;
     for (let f = 0; f < 4; f++) {
         //variable para recordar el ultimo numero diferente a cero
         let anterior = 0;
+        let indiceAnterior = 0;
         for (let c = 0; c < 4; c++) {
             let actual = matriz[f][c];
             //si el numero actual es diferente a cero
@@ -94,7 +91,6 @@ function moverIzq() {
                 //si ha habido un numero previo diferente a cero y es igual al actual
                 if (anterior != 0 && anterior == actual) {
                     //encuentra en que indice estaba ese valor previo
-                    let indiceAnterior = matriz[f].indexOf(anterior);
                     matriz[f][indiceAnterior] = 0;
                     matriz[f][c] = 0;
                     //duplica el valor de esa celda y borra la actual (porque se fusionaron)
@@ -102,7 +98,7 @@ function moverIzq() {
                     matriz[f][primerCero] = anterior*2;
                     //olvida el numero previo para que no se fusionen muchos en cadena
                     anterior = 0;
-                    seMovio = true;
+                    indiceAnterior = 0;
                     continue;
                 }
                 //si no hay valor previo almacenado
@@ -111,12 +107,37 @@ function moverIzq() {
                 matriz[f][primerCero] = actual;
                 //lo mueve lo mas a la izquierda posible y lo guarda como el ultimo valor diferente a 0
                 anterior = actual;
-                if (c != primerCero) {seMovio = true;}
+                indiceAnterior = c;
             }
         }
     }
     //vuelve a dibujar los valores en pantalla
-    if (seMovio) {poblarCelda();}
     actualizarTablero();
 }
-//document.addEventListener("keyup", moverTablero);
+
+function moverDer() {
+    for (let f = 0; f < 4; f++) {
+        let anterior = 0;
+        let indiceAnterior = 0;
+        for (let c = 3; c >= 0; c--) {
+            let actual = matriz[f][c];
+            if (actual != 0) {
+                if (anterior != 0 && anterior == actual) {
+                    matriz[f][indiceAnterior] = 0;
+                    matriz[f][c] = 0;
+                    let ultimoCero = matriz[f].lastIndexOf(0);
+                    matriz[f][ultimoCero] = anterior*2;
+                    anterior = 0;
+                    indiceAnterior = 0;
+                    continue;
+                }
+                matriz[f][c] = 0;
+                let ultimoCero = matriz[f].lastIndexOf(0);
+                matriz[f][ultimoCero] = actual;
+                anterior = actual;
+                indiceAnterior = c;
+            }
+        }
+    }
+    actualizarTablero();
+}
