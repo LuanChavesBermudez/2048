@@ -14,26 +14,25 @@ hr {
 }
 
 .flex-container {
-  display: flex;
-  background-color: rgb(64, 97, 139);
-  justify-content: center;
-  align-items: center;
-  max-width: fit-content;
-  max-height: fit-content;
-  justify-content: center;
-  margin: auto;
+    display: flex;
+    background-color: rgb(79, 111, 149);
+    justify-content: center;
+    align-items: center;
+    max-width: fit-content;
+    max-height: fit-content;
+    justify-content: center;
+    margin: auto;
 }
 
 .flex-container > div {
-  background-color: rgb(116, 148, 189);
-  margin: 2px;
-  width: 100px;
-  height: 100px;
-  text-align: center;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-size: 2.5vw;
-  vertical-align: middle;
-  line-height: 100px;
+    margin: 2px;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 2.5vw;
+    vertical-align: middle;
+    line-height: 100px;
 }
 
 .wrapper {
@@ -57,4 +56,64 @@ hr {
 .button:hover {
     background-color: rgb(116, 148, 189);
     color: black;
+}
+
+.x0 {
+    background-color: rgb(131, 164, 207);
+    color: black;
+}
+
+.x2 {
+    background-color: rgb(151, 187, 233);
+    color: black;
+}
+
+.x4 {
+    background-color: rgb(144, 133, 197);
+    color: black;
+}
+
+.x8 {
+    background-color: rgb(157, 80, 187);
+    color: white;
+}
+
+.x16 {
+    background-color: rgb(125, 37, 141);
+    color: white;
+}
+
+.x32 {
+    background-color: rgb(148, 33, 115);
+    color: white;
+}
+
+.x64 {
+    background-color: rgb(146, 29, 66);
+    color: white;
+}
+
+.x128 {
+    background-color: rgb(55, 194, 204);
+    color: white;
+}
+
+.x256 {
+    background-color: rgb(55, 194, 204);
+    color: white;
+}
+
+.x512 {
+    background-color: rgb(55, 194, 204);
+    color: white;
+}
+
+.x1024 {
+    background-color: rgb(44, 222, 121);
+    color: white;
+}
+
+.x2048 {
+    background-color: rgb(44, 222, 121);
+    color: white;
 }

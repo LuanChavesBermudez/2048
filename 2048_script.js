@@ -8,6 +8,7 @@ window.onload = function() {
 
 document.addEventListener("keyup", moverTablero);
 
+
 function moverTablero(evento) {
     if (evento.key == "ArrowLeft") {
         moverIzq();
@@ -15,6 +16,10 @@ function moverTablero(evento) {
     if (evento.key == "ArrowRight") {
         moverDer();
     }
+    if (evento.key == "ArrowDown") {
+        moverAbajo();
+    }
+    actualizarTablero();
 }
 
 function inicio() {
@@ -41,7 +46,6 @@ function inicio() {
             fila.appendChild(celda);
         }
     }
-
     actualizarTablero();
 }
 
@@ -49,12 +53,14 @@ function actualizarTablero(){
     for (let f = 0; f < 4; f++) {
         for (let c = 0; c < 4; c++) {
             let celda = document.getElementById(f.toString() + "-" + c.toString());
+            celda.classList.value = "";
             let num = matriz[f][c];
             if (num != 0) {
                 celda.innerText = num;
             } else { 
                 celda.innerText = "";
             }
+            celda.classList.add("x" + num.toString());
         }
     }
 }
@@ -89,7 +95,7 @@ function moverIzq() {
             //si el numero actual es diferente a cero
             if (actual != 0) {
                 //si ha habido un numero previo diferente a cero y es igual al actual
-                if (anterior != 0 && anterior == actual) {
+                if (anterior == actual) {
                     //encuentra en que indice estaba ese valor previo
                     matriz[f][indiceAnterior] = 0;
                     matriz[f][c] = 0;
@@ -99,20 +105,18 @@ function moverIzq() {
                     //olvida el numero previo para que no se fusionen muchos en cadena
                     anterior = 0;
                     indiceAnterior = 0;
-                    continue;
+                } else {
+                    //si no hay valor previo almacenado
+                    matriz[f][c] = 0;
+                    let primerCero = matriz[f].indexOf(0);
+                    matriz[f][primerCero] = actual;
+                    //lo mueve lo mas a la izquierda posible y lo guarda como el ultimo valor diferente a 0
+                    anterior = actual;
+                    indiceAnterior = primerCero;
                 }
-                //si no hay valor previo almacenado
-                matriz[f][c] = 0;
-                let primerCero = matriz[f].indexOf(0);
-                matriz[f][primerCero] = actual;
-                //lo mueve lo mas a la izquierda posible y lo guarda como el ultimo valor diferente a 0
-                anterior = actual;
-                indiceAnterior = c;
             }
         }
     }
-    //vuelve a dibujar los valores en pantalla
-    actualizarTablero();
 }
 
 function moverDer() {
@@ -122,22 +126,39 @@ function moverDer() {
         for (let c = 3; c >= 0; c--) {
             let actual = matriz[f][c];
             if (actual != 0) {
-                if (anterior != 0 && anterior == actual) {
+                if (anterior == actual) {
                     matriz[f][indiceAnterior] = 0;
                     matriz[f][c] = 0;
                     let ultimoCero = matriz[f].lastIndexOf(0);
                     matriz[f][ultimoCero] = anterior*2;
                     anterior = 0;
                     indiceAnterior = 0;
-                    continue;
-                }
-                matriz[f][c] = 0;
-                let ultimoCero = matriz[f].lastIndexOf(0);
-                matriz[f][ultimoCero] = actual;
-                anterior = actual;
-                indiceAnterior = c;
+                } else {
+                    matriz[f][c] = 0;
+                    let ultimoCero = matriz[f].lastIndexOf(0);
+                    matriz[f][ultimoCero] = actual;
+                    anterior = actual;
+                    indiceAnterior = ultimoCero;
+                }   
             }
         }
     }
-    actualizarTablero();
+}
+
+function moverAbajo() {
+    for (let f = 2; f >= 0; f--){
+        for (let c = 0; c < 4; c++) {
+            let actual = matriz[f][c];
+            let siguiente = matriz[f+1][c];
+            if (actual != 0){
+                if (actual == siguiente){
+                    matriz[f][c] = 0;
+                    matriz[f+1][c] = siguiente*2;
+                } else if (siguiente == 0) {
+                    matriz[f][c] = 0;
+                    matriz[f+1][c] = actual;
+                }
+            }
+        }
+    }
 }
