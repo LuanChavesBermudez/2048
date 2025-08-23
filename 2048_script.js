@@ -102,6 +102,7 @@ function moverIzq() {
                     //duplica el valor de esa celda y borra la actual (porque se fusionaron)
                     let primerCero = matriz[f].indexOf(0);
                     matriz[f][primerCero] = anterior*2;
+                    puntaje += anterior*2;
                     //olvida el numero previo para que no se fusionen muchos en cadena
                     anterior = 0;
                     indiceAnterior = 0;
@@ -131,6 +132,7 @@ function moverDer() {
                     matriz[f][c] = 0;
                     let ultimoCero = matriz[f].lastIndexOf(0);
                     matriz[f][ultimoCero] = anterior*2;
+                    puntaje += anterior*2;
                     anterior = 0;
                     indiceAnterior = 0;
                 } else {
@@ -154,6 +156,7 @@ function moverAbajo() {
                 if (actual == siguiente){
                     matriz[f][c] = 0;
                     matriz[f+1][c] = siguiente*2;
+                    puntaje += siguiente*2;
                 } else if (siguiente == 0) {
                     matriz[f][c] = 0;
                     matriz[f+1][c] = actual;
