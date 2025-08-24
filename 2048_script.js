@@ -1,6 +1,8 @@
 var puntaje = 0;
+var movimientos = 0;
 var matriz;
 var areaJuego;
+var gano = false;
 
 window.onload = function() {
     inicio();
@@ -19,7 +21,14 @@ function moverTablero(evento) {
     if (evento.key == "ArrowDown") {
         moverAbajo();
     }
+    if(evento.key == "ArrowUp") {
+        poblarCelda();
+    }
+    movimientos +=1;
     actualizarTablero();
+    if (gano) {
+        gameOver("Victoria!");
+    }
 }
 
 function inicio() {
@@ -103,6 +112,9 @@ function moverIzq() {
                     let primerCero = matriz[f].indexOf(0);
                     matriz[f][primerCero] = anterior*2;
                     puntaje += anterior*2;
+                    if (anterior*2 == 2048) {
+                        gano = true;
+                    }
                     //olvida el numero previo para que no se fusionen muchos en cadena
                     anterior = 0;
                     indiceAnterior = 0;
@@ -133,6 +145,9 @@ function moverDer() {
                     let ultimoCero = matriz[f].lastIndexOf(0);
                     matriz[f][ultimoCero] = anterior*2;
                     puntaje += anterior*2;
+                    if (anterior*2 == 2048) {
+                        gano = true;
+                    }
                     anterior = 0;
                     indiceAnterior = 0;
                 } else {
@@ -156,6 +171,9 @@ function moverAbajo() {
                 if (actual == siguiente){
                     matriz[f][c] = 0;
                     matriz[f+1][c] = siguiente*2;
+                    if (siguiente*2 == 2048) {
+                        gano = true;
+                    }
                     puntaje += siguiente*2;
                 } else if (siguiente == 0) {
                     matriz[f][c] = 0;
@@ -164,4 +182,27 @@ function moverAbajo() {
             }
         }
     }
+}
+
+function gameOver(mensaje) {
+    let overlay = document.getElementById("mensaje-gameover");
+    overlay.querySelector("p").textContent = mensaje;
+    overlay.style.display = 'flex';
+}
+
+function NuevoJuego() {
+    location.reload();
+}
+
+function mostrarEstadisticas(){
+    let overlay = document.getElementById("mensaje-estadisticas");
+    overlay.querySelector("p1").textContent = "Puntaje: " + puntaje.toString();
+    overlay.querySelector("p2").textContent = "Tiempo: ";
+    overlay.querySelector("p3").textContent = "Movimientos: " + movimientos.toString();
+    overlay.style.display = 'flex';
+}
+
+function cerrarMensaje() {
+    let overlay = document.getElementById("mensaje-estadisticas");
+    overlay.style.display = 'none';
 }

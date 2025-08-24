@@ -11,9 +11,25 @@
 <body>
     <h1>2048</h1>
     <hr>
+    <div class="overlay-message" id="mensaje-gameover">
+        <div style="text-align: center;">
+            <p>Game Over</p>
+            <button class="boton btnNuevoJuego" onclick="NuevoJuego()">Nuevo Juego</button>
+            <button class="boton btnEstadisticas" onclick="mostrarEstadisticas()">Estadisticas</button>
+        </div> 
+    </div>
+
+    <div class="overlay-message" id="mensaje-estadisticas">
+        <div style="text-align: center;">
+            <p1></p1><br>
+            <p2></p2><br>
+            <p3></p3><br>
+            <button class="boton btnRegresar" onclick="cerrarMensaje()">Regresar</button>
+        </div> 
+    </div>
 
     <div class="wrapper">
-        <button class="button">Estadisticas</button>
+        <button class="boton btnEstadisticas" onclick="mostrarEstadisticas()">Estadisticas</button>
     </div>
     
     <!-- area de juego 4x4-->
