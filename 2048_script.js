@@ -3,6 +3,7 @@ var movimientos = 0;
 var matriz;
 var areaJuego;
 var gano = false;
+var tiempoInicio = Date.now();
 
 window.onload = function() {
     inicio();
@@ -21,11 +22,7 @@ function moverTablero(evento) {
     if (evento.key == "ArrowDown") {
         moverAbajo();
     }
-    if(evento.key == "ArrowUp") {
-        poblarCelda();
-    }
     movimientos +=1;
-    actualizarTablero();
     if (gano) {
         gameOver("Victoria!");
     }
@@ -55,7 +52,15 @@ function inicio() {
             fila.appendChild(celda);
         }
     }
-    actualizarTablero();
+    poblarCelda();
+
+    setInterval(() => {
+        moverAbajo();
+    }, 1000);
+
+    setInterval(() => {
+        poblarCelda();
+    }, 4000);
 }
 
 function actualizarTablero(){
@@ -89,7 +94,7 @@ function poblarCelda() {
         matriz[0][indiceColumna] = opciones[Math.floor(Math.random() * opciones.length)];
         actualizarTablero();
     } else {
-        gameOver();
+        gameOver("Derrota!");
     }
 }
 
@@ -130,6 +135,7 @@ function moverIzq() {
             }
         }
     }
+    actualizarTablero();
 }
 
 function moverDer() {
@@ -160,6 +166,7 @@ function moverDer() {
             }
         }
     }
+    actualizarTablero();
 }
 
 function moverAbajo() {
@@ -182,6 +189,7 @@ function moverAbajo() {
             }
         }
     }
+    actualizarTablero();
 }
 
 function gameOver(mensaje) {
@@ -196,13 +204,32 @@ function NuevoJuego() {
 
 function mostrarEstadisticas(){
     let overlay = document.getElementById("mensaje-estadisticas");
-    overlay.querySelector("p1").textContent = "Puntaje: " + puntaje.toString();
-    overlay.querySelector("p2").textContent = "Tiempo: ";
-    overlay.querySelector("p3").textContent = "Movimientos: " + movimientos.toString();
+    //actualiza el timer cada segundo
+    setInterval(() => {
+        overlay.querySelector("p1").textContent = "Puntaje: " + puntaje.toString();
+        let tiempoTranscurrido = Date.now() - tiempoInicio;
+        overlay.querySelector("p2").textContent = "Tiempo: " + formatTime(tiempoTranscurrido);
+        overlay.querySelector("p3").textContent = "Movimientos: " + movimientos.toString();
+    }, 1000);
     overlay.style.display = 'flex';
 }
 
 function cerrarMensaje() {
     let overlay = document.getElementById("mensaje-estadisticas");
     overlay.style.display = 'none';
+}
+
+
+//sacado de internet, solo para mostrar el tiempo como hh:mm:ss
+function formatTime(ms) {
+    let msASegundos = Math.floor(ms / 1000);
+    let horas = Math.floor(msASegundos / 3600);
+    let minutos = Math.floor((msASegundos % 3600) / 60);
+    let segundos = msASegundos % 60;
+
+    horas = String(horas).padStart(2, '0');
+    minutos = String(minutos).padStart(2, '0');
+    segundos = String(segundos).padStart(2, '0');
+
+    return `${horas}:${minutos}:${segundos}`;
 }
