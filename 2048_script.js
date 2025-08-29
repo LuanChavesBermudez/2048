@@ -5,13 +5,15 @@ var areaJuego;
 var gano = false;
 var tiempoInicio = Date.now();
 
+//inicia el programa apenas carga la pagina
 window.onload = function() {
     inicio();
 }
 
+//listener para los tecleos del usuario
 document.addEventListener("keyup", moverTablero);
 
-
+//obtiene la tecla que se presiono y ejecuta el movimiento respectivo
 function moverTablero(evento) {
     if (evento.key == "ArrowLeft") {
         moverIzq();
@@ -28,6 +30,7 @@ function moverTablero(evento) {
     }
 }
 
+//inicializa la matriz logica, visual y los timers
 function inicio() {
     matriz = [
         [0, 0, 0, 0],
@@ -52,17 +55,22 @@ function inicio() {
             fila.appendChild(celda);
         }
     }
+    //el juego inicia con un digito en la matriz
     poblarCelda();
 
+    //cada segundo las celdas bajan una fila
     setInterval(() => {
         moverAbajo();
     }, 1000);
 
+    //cada 4 segundos aparece una nueva celda en la primera fila
     setInterval(() => {
         poblarCelda();
     }, 4000);
 }
 
+//recorre todo el tablero visual y actualiza el valor que corresponde
+//con su indice de la matriz logica
 function actualizarTablero(){
     for (let f = 0; f < 4; f++) {
         for (let c = 0; c < 4; c++) {
@@ -79,10 +87,7 @@ function actualizarTablero(){
     }
 }
 
-function gameOver() {
-    return true;
-}
-
+//coloca un numero en la primera fila
 function poblarCelda() {
     let opciones = [2, 2, 2, 2, 4];
     let indiceColumna = Math.floor(Math.random() * 4);
@@ -93,6 +98,7 @@ function poblarCelda() {
         }
         matriz[0][indiceColumna] = opciones[Math.floor(Math.random() * opciones.length)];
         actualizarTablero();
+    //si no puede colocar se asume que el tablero está lleno y se pierde el juego
     } else {
         gameOver("Derrota!");
     }
@@ -101,22 +107,23 @@ function poblarCelda() {
 
 function moverIzq() {
     for (let f = 0; f < 4; f++) {
-        //variable para recordar el ultimo numero diferente a cero
+        //variables para recordar el ultimo numero diferente a cero y su index
         let anterior = 0;
         let indiceAnterior = 0;
         for (let c = 0; c < 4; c++) {
             let actual = matriz[f][c];
             //si el numero actual es diferente a cero
             if (actual != 0) {
-                //si ha habido un numero previo diferente a cero y es igual al actual
+                //si el ultimo numero diferente de cero es igual al actual
                 if (anterior == actual) {
-                    //encuentra en que indice estaba ese valor previo
+                    //borra el numero del indice anterior y la celda actual
                     matriz[f][indiceAnterior] = 0;
                     matriz[f][c] = 0;
-                    //duplica el valor de esa celda y borra la actual (porque se fusionaron)
+                    //duplica el valor del numero y lo coloca en el primer cero disponible
                     let primerCero = matriz[f].indexOf(0);
                     matriz[f][primerCero] = anterior*2;
                     puntaje += anterior*2;
+                    //si el numero duplicado es 2048, levanta la bandera de victoria
                     if (anterior*2 == 2048) {
                         gano = true;
                     }
@@ -124,11 +131,12 @@ function moverIzq() {
                     anterior = 0;
                     indiceAnterior = 0;
                 } else {
-                    //si no hay valor previo almacenado
+                    //si no hay valor previo diferente a cero almacenado
                     matriz[f][c] = 0;
                     let primerCero = matriz[f].indexOf(0);
+                    //mueve el numero actual al primer cero disponible
                     matriz[f][primerCero] = actual;
-                    //lo mueve lo mas a la izquierda posible y lo guarda como el ultimo valor diferente a 0
+                    //lo marca como anterior para que los siguientes se puedan fusionar
                     anterior = actual;
                     indiceAnterior = primerCero;
                 }
@@ -138,6 +146,7 @@ function moverIzq() {
     actualizarTablero();
 }
 
+//lo mismo que moverIzq pero recorre la filas de derecha a izquierda
 function moverDer() {
     for (let f = 0; f < 4; f++) {
         let anterior = 0;
@@ -169,12 +178,16 @@ function moverDer() {
     actualizarTablero();
 }
 
+//solo compara celdas inmediatamente adjacentes
+//para crear el efecto de tetris
 function moverAbajo() {
     for (let f = 2; f >= 0; f--){
         for (let c = 0; c < 4; c++) {
+            //obtiene la celda actual y la que sigue
             let actual = matriz[f][c];
             let siguiente = matriz[f+1][c];
             if (actual != 0){
+                //si son iguales las fusiona
                 if (actual == siguiente){
                     matriz[f][c] = 0;
                     matriz[f+1][c] = siguiente*2;
@@ -182,6 +195,7 @@ function moverAbajo() {
                         gano = true;
                     }
                     puntaje += siguiente*2;
+                //si la celda siguiente es un cero, mueve la actual a ese index
                 } else if (siguiente == 0) {
                     matriz[f][c] = 0;
                     matriz[f+1][c] = actual;
@@ -192,19 +206,21 @@ function moverAbajo() {
     actualizarTablero();
 }
 
+//despliega el overlay con el mensaje que se le envie
 function gameOver(mensaje) {
     let overlay = document.getElementById("mensaje-gameover");
     overlay.querySelector("p").textContent = mensaje;
     overlay.style.display = 'flex';
 }
 
+//refresca la pagina
 function NuevoJuego() {
     location.reload();
 }
 
 function mostrarEstadisticas(){
     let overlay = document.getElementById("mensaje-estadisticas");
-    //actualiza el timer cada segundo
+    //actualiza el las estadisticas cada segundo
     setInterval(() => {
         overlay.querySelector("p1").textContent = "Puntaje: " + puntaje.toString();
         let tiempoTranscurrido = Date.now() - tiempoInicio;
@@ -214,6 +230,7 @@ function mostrarEstadisticas(){
     overlay.style.display = 'flex';
 }
 
+//oculta el overlay
 function cerrarMensaje() {
     let overlay = document.getElementById("mensaje-estadisticas");
     overlay.style.display = 'none';
