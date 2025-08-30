@@ -2,15 +2,38 @@ body {
     background-color:whitesmoke;
 }
 
+/* animacion para deslizar el elemento desde offscreen al centro*/
+@keyframes slideIN {
+      0% {
+        transform: translateX(-1000px);
+      }
+      70% {
+        transform: translateX(75px)
+      }
+      100% {
+        transform: translateX(0);
+      }
+}
+
+/* animacion para que el elemento aparezca lentamente */
+@keyframes fadeIN {
+    0% {opacity: 0;}
+    100% {opacity: 100;}
+}
+
 h1 {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     color: black;
     text-align: center;
     font-size: 50px;
+    animation-name: fadeIN;
+    animation-duration: 2s;
 }
 
 hr {
     width: 500px;
+    animation-name: fadeIN;
+    animation-duration: 2s;
 }
 
 .overlay-message {
@@ -41,6 +64,8 @@ hr {
     padding: 5px 10px;
     transition-duration: 0.4s;
     border-radius: 5px;
+    animation-name: fadeIN;
+    animation-duration: 0.7s;
 }
 
 .boton:hover {
@@ -81,6 +106,8 @@ hr {
     max-height: fit-content;
     justify-content: center;
     margin: auto;
+    animation-name: slideIN;
+    animation-duration: 0.3s;
 }
 
 .flex-container > div {
